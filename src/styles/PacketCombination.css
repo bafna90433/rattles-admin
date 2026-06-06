@@ -1,0 +1,207 @@
+/* ==========================================================================
+   🌟 Bafna Stock App - Packet Combination Flat Cardless Theme
+   ========================================================================== */
+
+.packet-combination-container {
+  padding: 0 0 40px;
+  font-family: 'Outfit', 'Inter', sans-serif;
+  color: #0f172a;
+}
+
+.header-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.header-toggle h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.toggle-btn {
+  background: #4f46e5;
+  color: white;
+  padding: 9px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13.5px;
+  transition: all 0.2s ease;
+}
+
+.toggle-btn:hover {
+  background: #4338ca;
+}
+
+/* ------------------------------------------------------ */
+/* FORM CARD (Flat Workspace) */
+.packet-combo-card {
+  background: transparent;
+  padding: 0 0 32px 0;
+  border-bottom: 1px solid #e2e8f0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.packet-combo-card label {
+  display: block;
+  font-weight: 700;
+  color: #475569;
+  margin-top: 20px;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.packet-combo-card input,
+.packet-combo-card select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #ffffff;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.packet-combo-card input:focus,
+.packet-combo-card select:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+.btn-save {
+  margin-top: 28px;
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 11px 22px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-save:hover {
+  background: #4338ca;
+}
+
+/* ------------------------------------------------------ */
+/* IMAGE PREVIEW */
+.image-preview {
+  margin-top: 14px;
+  text-align: left;
+}
+
+.image-preview img {
+  width: 120px;
+  height: 120px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  object-fit: contain;
+  background: white;
+}
+
+.preview-label {
+  color: #475569;
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+/* ------------------------------------------------------ */
+/* PRODUCT LIST GRID */
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.product-card {
+  width: 110px;
+  text-align: center;
+  background: #f8fafc;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.product-card:hover {
+  border-color: #cbd5e1;
+}
+
+.product-card.selected {
+  border-color: #4f46e5;
+  background: #f5f3ff;
+}
+
+.product-card img {
+  width: 60px;
+  height: 60px;
+  border-radius: 4px;
+  object-fit: contain;
+  margin-bottom: 6px;
+  border: 1px solid #e2e8f0;
+  background: white;
+}
+
+.product-card p {
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0;
+}
+
+/* ------------------------------------------------------ */
+/* EMPTY MESSAGE */
+.empty-msg {
+  color: #94a3b8;
+  font-style: italic;
+  margin-top: 10px;
+  text-align: left;
+  font-size: 13px;
+}
+
+/* ------------------------------------------------------ */
+/* TABLE VIEW (Flat, No Card Borders) */
+.packet-combo-list {
+  margin-top: 10px;
+}
+
+.packet-combo-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.packet-combo-list th {
+  background: transparent;
+  text-align: left;
+  padding: 14px 12px;
+  font-size: 11.5px;
+  color: #475569;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid #cbd5e1;
+}
+
+.packet-combo-list td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 13.5px;
+  color: #0f172a;
+}
+
+.packet-combo-list tbody tr:hover {
+  background: #f8fafc;
+}

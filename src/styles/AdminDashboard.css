@@ -1,0 +1,330 @@
+/* --- Global Variables & Font --- */
+:root {
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  --bg-light: #f9fafb;
+  --bg-white: #ffffff;
+  --border-color: #e5e7eb;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-light: #6b7280;
+
+  /* Brand Colors */
+  --blue: #3b82f6;
+  --green: #10b981;
+  --indigo: #6366f1;
+  --red: #ef4444;
+  --emerald: #10b981; /* Using green */
+
+  /* Light background colors for icons */
+  --blue-light: #dbeafe;
+  --green-light: #d1fae5;
+  --indigo-light: #e0e7ff;
+  --red-light: #fee2e2;
+  --emerald-light: #d1fae5;
+}
+
+/* --- Base Layout --- */
+.admin-dashboard {
+  padding: 24px 32px;
+  background: var(--bg-light);
+  min-height: 100vh;
+  font-family: var(--font-family);
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.subtitle {
+  color: var(--text-light);
+  margin: 4px 0 0 0;
+  font-size: 16px;
+}
+
+.refresh-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--bg-white);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.refresh-button:hover {
+  background: var(--bg-light);
+  border-color: #d1d5db;
+}
+
+.refresh-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* --- Stats Cards Section --- */
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.card {
+  background: var(--bg-white);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07),
+    0 4px 6px -4px rgba(0, 0, 0, 0.07);
+}
+
+.card-icon {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-info h3 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.card-info p {
+  color: var(--text-light);
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Icon Background Colors */
+.card-products .card-icon {
+  background: var(--blue-light);
+  color: var(--blue);
+}
+.card-combinations .card-icon {
+  background: var(--green-light);
+  color: var(--green);
+}
+.card-entries .card-icon {
+  background: var(--indigo-light);
+  color: var(--indigo);
+}
+.card-warning .card-icon {
+  background: var(--red-light);
+  color: var(--red);
+}
+.card-success .card-icon {
+  background: var(--emerald-light);
+  color: var(--emerald);
+}
+
+/* --- Tables Section --- */
+.dashboard-tables {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.table-section {
+  background: var(--bg-white);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  overflow-x: auto; /* For responsiveness on small screens */
+}
+
+.table-section h4 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.table-section table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-section th,
+.table-section td {
+  padding: 12px 10px;
+  text-align: left;
+  font-size: 14px;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.table-section th {
+  font-weight: 600;
+  color: var(--text-light);
+  background-color: var(--bg-light);
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.table-section td {
+  color: var(--text-secondary);
+}
+
+.table-section tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table-section tbody tr:hover {
+  background-color: #fcfdfe;
+}
+
+.empty-state {
+  text-align: center !important;
+  color: var(--text-light);
+  padding: 32px 0;
+}
+
+/* --- Utility Classes --- */
+.table-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  object-fit: cover;
+  background: var(--bg-white);
+  display: block;
+}
+
+.color-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.color-box {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.color-code-text {
+  font-family: monospace;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.qty-plus {
+  color: #059669; /* Darker Green */
+  font-weight: 600;
+}
+
+.qty-minus {
+  color: #dc2626; /* Darker Red */
+  font-weight: 600;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* --- Loading State --- */
+.admin-dashboard-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  font-family: var(--font-family);
+  color: var(--text-secondary);
+  font-size: 18px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  animation: spin 1.5s linear infinite;
+  margin-bottom: 16px;
+  color: var(--blue);
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 900px) {
+  .dashboard-tables {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-dashboard {
+    padding: 16px;
+  }
+  .dashboard-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .refresh-button {
+    width: 100%;
+    justify-content: center;
+  }
+  .dashboard-cards {
+    grid-template-columns: 1fr;
+  }
+}/* --- Packet Production Card --- */
+.card-packet .card-icon {
+  background: #fef3c7;
+  color: #b45309;
+}
+.card-packet {
+  border-left: 4px solid #fbbf24;
+}
+
+
+
+/* Center alignment for image cells */
+.text-center {
+  text-align: center;
+}
+
+/* Responsive tables */
+@media (max-width: 900px) {
+  .dashboard-tables {
+    grid-template-columns: 1fr;
+  }
+}
+

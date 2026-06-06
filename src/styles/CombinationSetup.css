@@ -1,0 +1,495 @@
+/* ==========================================================================
+   🌟 Bafna Stock App - Combination Setup Flat Cardless Theme
+   ========================================================================== */
+
+/* Main Container */
+.combo-setup-container {
+    padding: 0 0 40px;
+    background: transparent;
+    font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #0f172a;
+}
+
+/* Header & Toggle */
+.header-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.toggle-btn {
+    background: #4f46e5; /* Indigo */
+    color: white;
+    border: none;
+    padding: 9px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13.5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.toggle-btn:hover {
+    background: #4338ca;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #e2e8f0;
+    margin: 0 0 28px 0;
+}
+
+/* --- COMBO BUILDER LAYOUT --- */
+.combo-builder {
+    display: grid;
+    grid-template-columns: 1.4fr 0.85fr;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+/* LEFT Panel: Form Workspace (Flat, No Card) */
+.form-card {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0 0 28px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.form-group-top {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 28px;
+}
+
+.input-group {
+    flex: 1;
+}
+
+.form-card label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+    color: #475569;
+    font-size: 13px;
+}
+
+.form-card input,
+.form-card select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    background: #ffffff;
+    transition: all 0.2s;
+    box-sizing: border-box;
+}
+
+.form-card input:focus,
+.form-card select:focus {
+    border-color: #4f46e5;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+/* Save Button & Upload */
+.upload-save-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 32px;
+    border-top: 1px dashed #e2e8f0;
+    padding-top: 24px;
+}
+
+.upload-group {
+    flex: 1;
+}
+
+.btn-save {
+    background: #4f46e5;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 24px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14.5px;
+    transition: background-color 0.2s;
+}
+
+.btn-save:hover {
+    background: #4338ca;
+}
+
+/* --- PART SELECTION AREA --- */
+.parts-selection-area h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-left: 4px solid #10b981; /* Emerald border-left accent */
+    padding-left: 12px;
+}
+
+.parts-grid-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.part-group {
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 16px;
+    background: #f8fafc;
+}
+
+.part-group h5 {
+    margin: 0 0 12px 0;
+    color: #1e3a8a;
+    font-size: 13.5px;
+    font-weight: 700;
+}
+
+/* Color Options */
+.color-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.color-option {
+    flex: 0 0 auto;
+    width: 110px;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    transition: all 0.2s;
+    cursor: pointer;
+    padding: 4px;
+    text-align: center;
+}
+
+.color-option:hover {
+    border-color: #cbd5e1;
+}
+
+.color-option.option-selected {
+    border-color: #4f46e5;
+    background: #f5f3ff;
+}
+
+.color-option-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    border-radius: 4px;
+    font-size: 13px;
+    height: 100%;
+    padding: 4px 0;
+}
+
+.color-code-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 4px 0;
+    font-size: 11px;
+}
+
+/* Color Swatch */
+.color-swatch-tiny {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid #cbd5e1;
+    flex-shrink: 0;
+}
+
+.color-label-code {
+    font-family: monospace;
+    color: #475569;
+    font-weight: 600;
+}
+
+/* Part Image Preview */
+.color-part-preview-large {
+    width: 60px;
+    height: 60px;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+    object-fit: cover;
+    margin-top: 4px;
+}
+
+/* --- PREVIEW PANEL (STICKY, FLAT ACCENT) --- */
+.preview-panel.sticky-panel {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    border-left: 4px solid #7c3aed; /* Purple left border accent */
+    padding: 0 0 0 20px;
+    
+    position: sticky;
+    top: 24px; 
+    max-height: calc(100vh - 60px); 
+    overflow-y: auto; 
+}
+
+.preview-panel h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-align: left;
+}
+
+.preview-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.preview-image-large {
+    max-width: 100%;
+    max-height: 220px; 
+    width: auto;
+    height: auto;
+    border-radius: 4px;
+    object-fit: contain;
+}
+
+.preview-info {
+    font-size: 13.5px;
+    color: #475569;
+    border-top: 1px dashed #e2e8f0;
+    padding-top: 16px;
+}
+
+.preview-color-swatch {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    border: 1px solid #cbd5e1;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
+/* Selected Parts Overview */
+.selected-parts-section {
+    margin-top: 24px;
+    border-top: 1px dashed #e2e8f0;
+    padding-top: 20px;
+}
+
+.selected-parts-section h3 {
+    font-size: 13.5px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #475569;
+}
+
+.selected-parts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 10px;
+}
+
+.selected-part-card {
+    text-align: center;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 6px;
+}
+
+.selected-part-img {
+    width: 38px;
+    height: 38px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+}
+
+.selected-part-label {
+    margin: 4px 0 0 0;
+    font-size: 10px;
+    color: #475569;
+    font-weight: 600;
+}
+
+/* --- LIST VIEW (Horizontal, Flat, Professional) --- */
+.combo-list {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin-top: 10px;
+}
+
+.professional-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+}
+
+.professional-table th,
+.professional-table td {
+    border-bottom: 1px solid #e2e8f0;
+    padding: 14px 12px;
+    text-align: left;
+}
+
+.professional-table th {
+    background-color: transparent;
+    color: #475569;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 11.5px;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid #cbd5e1;
+}
+
+.professional-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+/* Horizontal Parts List */
+.parts-horizontal-list {
+    display: flex; 
+    flex-wrap: wrap;
+    gap: 8px 12px;
+}
+
+.saved-part-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #e2e8f0;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: #ffffff;
+}
+
+.part-code-label {
+    font-weight: 700;
+    color: #0f172a;
+    font-size: 11.5px;
+}
+
+.color-code-list {
+    font-family: monospace;
+    font-size: 11.5px;
+    color: #475569;
+    font-weight: 600;
+}
+
+.color-swatch-list {
+    width: 10px; 
+    height: 10px; 
+    border-radius: 50%;
+    border: 1px solid #cbd5e1;
+    flex-shrink: 0;
+}
+
+.part-preview-list-img {
+    width: 28px;
+    height: 28px;
+    border-radius: 3px;
+    object-fit: cover;
+    border: 1px solid #e2e8f0;
+}
+
+.sample-list-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    object-fit: cover;
+    border: 1px solid #e2e8f0;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+    .combo-builder {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+    .preview-panel.sticky-panel {
+        position: static;
+        max-height: none;
+        overflow-y: visible;
+        margin-top: 20px;
+        border-left: none;
+        border-top: 4px solid #7c3aed;
+        padding-left: 0;
+        padding-top: 20px;
+    }
+    .form-group-top {
+        flex-direction: column;
+    }
+    .upload-save-section {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+}
+
+/* Action Buttons in List View */
+.btn-edit-action {
+    background: #0ea5e9; /* Sky Blue */
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 12.5px;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: background-color 0.2s;
+}
+
+.btn-edit-action:hover {
+    background: #0284c7;
+}
+
+.btn-delete-action {
+    background: #ef4444; /* Red */
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-delete-action:hover {
+    background: #dc2626;
+}

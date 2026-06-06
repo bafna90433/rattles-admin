@@ -1,0 +1,205 @@
+/*
+|--------------------------------------------------------------------------
+| CSS Variables for Themes
+|--------------------------------------------------------------------------
+| Note: Using CSS Variables for maintainability, though inline values are used below
+|       to quickly target the exact look from the image.
+*/
+:root {
+  /* Default Admin Theme Colors (Blue) */
+  --admin-primary: #3b82f6; 
+  --admin-hover: #2563eb;
+  --bg-color-gradient-start: #f0f4f8; /* Very light gray/blue */
+  --bg-color-gradient-end: #eaf2f8;   /* Lighter blue */
+  
+  /* Employee Theme Colors (Teal/Cyan) */
+  --employee-primary: #06b6d4; 
+  --employee-hover: #0891b2;
+  --employee-light-bg: #ecfeff;
+}
+
+/* ======= MAIN SPLIT LAYOUT ======= */
+.login-wrapper {
+  display: flex;
+  height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+  background-color: #f0f4f8; 
+  overflow: hidden; /* Ensure no unwanted scrollbars */
+}
+
+/* ======= LEFT SECTION - FORM CONTAINER ======= */
+.login-left {
+  flex: 1; /* Takes available space */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--bg-color-gradient-start), var(--bg-color-gradient-end));
+  padding: 40px;
+}
+
+/* 🎨 Form Card Container (The WHITE rounded box) */
+.login-content {
+  width: 100%;
+  max-width: 380px;
+  text-align: left;
+  padding: 40px; 
+  border-radius: 16px; 
+  background-color: #ffffff; 
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05); 
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.login-title {
+  font-size: 1.6rem; 
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #1f2937; 
+}
+
+.login-subtitle {
+  color: #6b7280; 
+  margin-bottom: 25px; 
+  font-size: 0.9rem;
+}
+
+/* ======= INPUTS ======= */
+.login-content input {
+  width: 100%;
+  padding: 12px 14px; 
+  margin-bottom: 15px; 
+  border-radius: 6px; 
+  border: 1px solid #d1d5db; 
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  background-color: #fff;
+}
+
+.login-content input:focus {
+  border-color: var(--admin-primary); 
+  box-shadow: 0 0 0 1px var(--admin-primary); 
+}
+
+/* ======= BUTTONS (Admin Default) ======= */
+.submit-btn {
+  width: 100%;
+  border: none;
+  padding: 12px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500; 
+  border-radius: 6px; 
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px; 
+  background-color: var(--admin-primary); 
+}
+
+.submit-btn:hover {
+  background-color: var(--admin-hover); 
+}
+
+.back-btn {
+  margin-top: 10px; 
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--admin-primary); 
+  color: var(--admin-primary);
+  padding: 12px;
+  border-radius: 6px; 
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.back-btn:hover {
+  background: var(--admin-light-bg);
+}
+
+/* ======= RIGHT IMAGE SECTION - FIX APPLIED HERE ======= */
+.login-right {
+  /*
+   * Change: Flex-grow set to 2 to give it more space, allowing the image to fit better.
+   * If the aspect ratio of the window changes significantly, you might still see
+   * some minor cropping depending on the image's inherent aspect ratio.
+   * flex-shrink is set to 0 to prevent it from shrinking too much
+   */
+  flex: 2; /* Give the right section more room */
+  height: 100vh;
+  overflow: hidden; /* Still hide overflowing parts */
+  position: relative;
+  min-width: 400px; /* Ensure a minimum width to display the image */
+}
+
+.login-side-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* This makes the image cover the container, potentially cropping to fit */
+  /*
+   * Optional Fix: If `object-fit: cover` still crops too much for you,
+   * you could try `object-fit: contain;` which would show the entire image
+   * but might leave empty space (letterboxing) if aspect ratios don't match.
+   * Given the image in your screenshot, `cover` is generally preferred for filling the space.
+   */
+   /* object-position: center right; If you want to explicitly keep the right side visible */
+}
+
+/*
+|--------------------------------------------------------------------------
+| EMPLOYEE THEME (Color Overrides - Maintain consistency)
+|--------------------------------------------------------------------------
+*/
+
+.employee-theme .login-left {
+  background: linear-gradient(135deg, var(--bg-color-gradient-start), var(--employee-light-bg));
+}
+
+.employee-theme .login-content input:focus {
+  border-color: var(--employee-primary);
+  box-shadow: 0 0 0 1px var(--employee-primary); 
+}
+
+.employee-theme .submit-btn {
+  background-color: var(--employee-primary);
+}
+
+.employee-theme .submit-btn:hover {
+  background-color: var(--employee-hover);
+}
+
+.employee-theme .back-btn {
+  border: 1px solid var(--employee-primary);
+  color: var(--employee-primary);
+}
+
+.employee-theme .back-btn:hover {
+  background: var(--employee-light-bg);
+}
+
+/* ======= RESPONSIVE DESIGN (Adjusted for image behavior) ======= */
+@media (max-width: 950px) {
+  .login-right {
+    display: none; /* Hide the image on smaller screens */
+  }
+
+  .login-left {
+    width: 100%;
+    min-width: unset;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 500px) {
+  .login-content {
+    padding: 30px 25px;
+  }
+}

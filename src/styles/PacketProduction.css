@@ -1,0 +1,237 @@
+/* 🌟 Container Styling */
+.packet-production-container,
+.packet-sales-container {
+  background: #f9fafc;
+  padding: 30px;
+  border-radius: 10px;
+  color: #1f2937;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+/* 🧾 Heading */
+.packet-production-container h2,
+.packet-sales-container h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 25px;
+}
+
+/* ⚠️ Empty message */
+.empty-msg {
+  background: #fff5f5;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  padding: 12px 16px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* 🧱 Table Styling */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+/* 🧾 Table Header */
+thead {
+  background: linear-gradient(90deg, #f3f4f6, #f9fafb);
+}
+
+thead th {
+  text-align: left;
+  padding: 14px 16px;
+  font-weight: 700;
+  color: #374151;
+  font-size: 14px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+/* 📋 Table Rows */
+tbody tr {
+  transition: background 0.2s ease;
+}
+
+tbody tr:hover {
+  background: #f1f5f9;
+}
+
+/* 📦 Table Cells */
+tbody td {
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: middle;
+}
+
+/* 🧍 Entry By / Date */
+tbody td:last-child {
+  white-space: nowrap;
+  color: #475569;
+  font-size: 13px;
+}
+
+/* 🖼️ Image Preview */
+tbody td img {
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  transition: transform 0.2s ease;
+}
+
+tbody td img:hover {
+  transform: scale(1.05);
+}
+
+/* 🔢 Quantity Highlight */
+tbody td:nth-child(3),
+tbody td:nth-child(4) {
+  text-align: center;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+/* 🧾 Card Style Layout (if used elsewhere) */
+.production-card {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+}
+
+/* 📋 Form Section (used in Packet Sales) */
+.sale-form {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.sale-form label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 14px;
+}
+
+.sale-form select,
+.sale-form input {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.sale-form select:focus,
+.sale-form input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* 💾 Save Button */
+.btn-save {
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.btn-save:hover {
+  background: linear-gradient(90deg, #1e40af, #2563eb);
+  transform: translateY(-1px);
+}
+
+.btn-save:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 📋 Sales History Table */
+.sales-history {
+  margin-top: 10px;
+  overflow-x: auto;
+}
+
+/* 📱 Responsive Design */
+@media (max-width: 768px) {
+  .packet-production-container,
+  .packet-sales-container {
+    padding: 20px;
+  }
+
+  .packet-production-container h2,
+  .packet-sales-container h2 {
+    font-size: 18px;
+  }
+
+  .sale-form {
+    padding: 15px;
+    gap: 10px;
+  }
+
+  table {
+    font-size: 13px;
+  }
+
+  thead th,
+  tbody td {
+    padding: 10px 12px;
+  }
+
+  .btn-save {
+    padding: 9px;
+    font-size: 13px;
+  }
+}
+
+/* 📊 Tab Header Buttons (used in Packet Tabs) */
+.tab-header {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab-header button {
+  flex: 1;
+  padding: 10px 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  background: #e5e7eb;
+  transition: all 0.3s;
+}
+
+.tab-header button.active {
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  color: white;
+}
+
+.tab-header button:hover {
+  background: #d1d5db;
+}

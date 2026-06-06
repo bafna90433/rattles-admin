@@ -1,0 +1,361 @@
+/* ==========================================================================
+   🌟 Bafna Stock App - Premium Dark Contrast Sidebar Stylesheet
+   ========================================================================== */
+
+:root {
+  --sidebar-width: 260px;
+  
+  /* Dark Sidebar Theme Colors */
+  --sidebar-bg: #0f172a;        /* Deep navy slate background */
+  --sidebar-border: #1e293b;    /* Slate border */
+  --sidebar-active-bg: rgba(255, 255, 255, 0.05); /* Subtle active tint */
+  --sidebar-active-text: #ffffff;
+  --sidebar-text: #94a3b8;      /* Inactive menu items */
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.02);
+  --sidebar-hover-text: #f1f5f9;
+  
+  --brand-gradient: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+  --radius: 8px;
+}
+
+/* --- Layout Wrapper --- */
+.layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: #f8fafc; /* Content area remains clean light gray */
+  font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.content {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  padding: 30px 40px;
+  background: linear-gradient(135deg, #f5f3ff 0%, #eef2ff 100%);
+  overflow-y: auto;
+  min-height: 100vh;
+  width: calc(100vw - var(--sidebar-width));
+}
+
+/* --- Mobile Header --- */
+.mobile-header {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: var(--sidebar-bg);
+  border-bottom: 1px solid var(--sidebar-border);
+  z-index: 100;
+  padding: 0 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-menu-toggle {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.mobile-menu-toggle:hover {
+  background: var(--sidebar-active-bg);
+}
+
+.mobile-logo {
+  font-size: 17px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 998;
+}
+
+/* --- Sidebar Container --- */
+.sidebar {
+  width: var(--sidebar-width);
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 999;
+}
+
+/* Header & Logo */
+.sidebar-header {
+  padding: 24px 20px;
+  border-bottom: 1px solid var(--sidebar-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  font-size: 22px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--brand-gradient);
+  border-radius: 8px;
+  color: white;
+  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+}
+
+.logo-text h2 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff !important;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
+.logo-text span {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 600;
+  display: block;
+  margin-top: 1px;
+}
+
+.close-mobile {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--sidebar-text);
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.close-mobile:hover {
+  background: var(--sidebar-active-bg);
+}
+
+/* --- Scrollable Content --- */
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* --- Groups --- */
+.sidebar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar-group-title {
+  padding: 0 12px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #475569; /* Gray header text */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sidebar-group-items {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Stock overview separate spacing at bottom */
+.stock-overview-section {
+  margin-top: auto;
+  border-top: 1px solid var(--sidebar-border);
+  padding-top: 20px;
+}
+
+/* --- Nav Item Styling (Cardless, Left Stripe Accent) --- */
+.nav-item {
+  position: relative;
+}
+
+.nav-item a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--sidebar-text);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  transition: all 0.2s ease;
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.nav-item a:hover {
+  background: var(--sidebar-hover-bg);
+  color: var(--sidebar-hover-text);
+  padding-left: 18px; /* Smooth slide shift on hover */
+}
+
+/* Active State (No bordered box) */
+.nav-item.active a {
+  background: var(--sidebar-active-bg);
+  color: var(--sidebar-active-text);
+}
+
+/* Left Accent Line on Active Nav Items */
+.nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: -12px; /* Pull it to the edge of the padding */
+  top: 6px;
+  bottom: 6px;
+  width: 4px;
+  background: #6366f1; /* Glowing indigo active bar */
+  border-radius: 0 4px 4px 0;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.6);
+}
+
+.nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: inherit;
+  transition: transform 0.2s ease;
+}
+
+.nav-item a:hover .nav-icon {
+  transform: scale(1.08);
+}
+
+.nav-item.active .nav-icon {
+  color: #6366f1; /* Active color matches active bar */
+}
+
+/* --- Footer (Logout) --- */
+.sidebar-footer {
+  padding: 16px 12px;
+  border-top: 1px solid var(--sidebar-border);
+}
+
+.logout-btn {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--sidebar-border);
+  color: var(--sidebar-text);
+  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  font-size: 14.5px;
+}
+
+.logout-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.2);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.05);
+}
+
+/* --- Responsiveness --- */
+@media (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+  
+  .mobile-header {
+    display: flex;
+  }
+  
+  .sidebar-overlay {
+    display: block;
+  }
+  
+  .close-mobile {
+    display: flex;
+    color: #ffffff;
+  }
+  
+  .content {
+    margin-left: 0;
+    width: 100%;
+    padding: 80px 16px 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .sidebar {
+    width: 100%;
+    max-width: 280px;
+  }
+  
+  .content {
+    padding: 76px 12px 12px;
+  }
+}
+
+/* Custom Scrollbar */
+.sidebar-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
