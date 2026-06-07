@@ -6,6 +6,7 @@ import { convertToWebP } from "../utils/webp";
 interface RawMaterial {
   part_code: string;
   color_code: string;
+  color_name?: string;
   color_image: string; // base64
 }
 
@@ -78,6 +79,7 @@ const CombinationSetup: React.FC = () => {
       const exists = groupedParts[r.part_code].some(
         (existing: RawMaterial) =>
           existing.color_code === r.color_code &&
+          existing.color_name === r.color_name &&
           existing.color_image === r.color_image
       );
 
@@ -85,6 +87,7 @@ const CombinationSetup: React.FC = () => {
         groupedParts[r.part_code].push({
           part_code: r.part_code,
           color_code: r.color_code,
+          color_name: r.color_name || "",
           color_image: r.color_image,
         });
       }
@@ -313,15 +316,10 @@ const CombinationSetup: React.FC = () => {
                                         style={{ display: 'none' }} 
                                     />
                                     <div className="color-code-wrapper">
-                                        {/* Real Color Swatch */}
-                                        <span
-                                        className="color-swatch-tiny" 
-                                        style={{
-                                            backgroundColor: colorOption.color_code,
-                                        }}
-                                        title={colorOption.color_code}
-                                        ></span>
-                                        <span className="color-label-code">{colorOption.color_code}</span>
+                                        <span className="color-label-code">
+                                          {colorOption.color_code}
+                                          {colorOption.color_name ? ` (${colorOption.color_name})` : ""}
+                                        </span>
                                     </div>
                                     
                                     {colorOption.color_image && (
@@ -382,11 +380,8 @@ const CombinationSetup: React.FC = () => {
                   <p><strong>Part:</strong> {previewPart.part_code}</p>
                   <p>
                     <strong>Color:</strong>{" "}
-                    <span
-                      className="preview-color-swatch"
-                      style={{ backgroundColor: previewPart.color_code }}
-                    ></span>{" "}
                     {previewPart.color_code}
+                    {previewPart.color_name ? ` (${previewPart.color_name})` : ""}
                   </p>
                 </div>
               </>
@@ -408,7 +403,10 @@ const CombinationSetup: React.FC = () => {
                       />
                       <p className="selected-part-label">
                         **{p.part_code}** <br />
-                        <span style={{ color: p.color_code, fontWeight: 700 }}>{p.color_code}</span>
+                        <span style={{ fontWeight: 700 }}>
+                          {p.color_code}
+                          {p.color_name ? ` (${p.color_name})` : ""}
+                        </span>
                       </p>
                     </div>
                   ))}
@@ -447,12 +445,10 @@ const CombinationSetup: React.FC = () => {
                         {c.parts.map((p, idx) => (
                           <div key={idx} className="saved-part-item">
                             <span className="part-code-label">{p.part_code}:</span>
-                            <span
-                              className="color-swatch-list"
-                              style={{ backgroundColor: p.color_code }}
-                              title={p.color_code}
-                            ></span>
-                             <span className="color-code-list">{p.color_code}</span>
+                             <span className="color-code-list">
+                               {p.color_code}
+                               {p.color_name ? ` (${p.color_name})` : ""}
+                             </span>
                             {p.color_image && (
                               <img
                                 src={getImageUrl(p.color_image)}

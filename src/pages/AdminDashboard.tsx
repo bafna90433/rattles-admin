@@ -38,6 +38,7 @@ interface RawEntry {
   part_code: string;
   color_image: string | null;
   color_code: string | null;
+  color_name?: string | null;
   quantity: number;
   entry_by: string;
   entry_date: string | number;
@@ -378,7 +379,10 @@ const AdminDashboard: React.FC = () => {
                       )}
                     </td>
                     <td>{e.part_code}</td>
-                    <td>{e.color_code || "-"}</td>
+                    <td>
+                      {e.color_code || "-"}
+                      {e.color_name ? ` (${e.color_name})` : ""}
+                    </td>
                     <td
                       className={`text-center ${
                         e.quantity < 0 ? "qty-minus" : "qty-plus"

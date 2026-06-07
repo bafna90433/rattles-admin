@@ -24,7 +24,7 @@ const RawMaterialList: React.FC = () => {
     showMinusOnly ? e.quantity < 0 : e.quantity >= 0
   );
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string | number) => {
     if (confirm("🗑️ Are you sure you want to delete this entry?")) {
       await (window as any).electronAPI.deleteRawEntry(id);
       alert("✅ Deleted successfully!");
@@ -77,21 +77,11 @@ const RawMaterialList: React.FC = () => {
                 <td>{products.find((p) => String(p._id || p.id || "") === String(e.product_id))?.product_code}</td>
                 <td>{e.part_code}</td>
                 <td>
-                  {e.color_code && (
-                    <>
-                      <span
-                        style={{
-                          backgroundColor: e.color_code,
-                          display: "inline-block",
-                          width: "20px",
-                          height: "20px",
-                          borderRadius: "4px",
-                          border: "1px solid #ccc",
-                          marginRight: "6px",
-                        }}
-                      ></span>
+                  {(e.color_code || e.color_name) && (
+                    <span>
                       {e.color_code}
-                    </>
+                      {e.color_name ? ` (${e.color_name})` : ""}
+                    </span>
                   )}
                 </td>
                 <td>
@@ -127,7 +117,7 @@ const RawMaterialList: React.FC = () => {
                   <td>
                     <button
                       className="btn btn-delete"
-                      onClick={() => handleDelete(e.id)}
+                      onClick={() => handleDelete(e._id || e.id)}
                     >
                       🗑️ Delete
                     </button>

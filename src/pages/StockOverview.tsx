@@ -10,6 +10,7 @@ interface RawStockItem {
   product_code: string;
   part_code: string;
   color_code?: string;
+  color_name?: string;
   color_image?: string;
   total_qty: number;
 }
@@ -65,7 +66,7 @@ const StockOverview: React.FC = () => {
     try {
       const entries = await (window as any).electronAPI.getRawEntries();
       const grouped = entries.reduce((acc: any[], entry: any) => {
-        const key = `${entry.product_id}_${entry.part_code}_${entry.color_code || ""}`;
+        const key = `${entry.product_id}_${entry.part_code}_${entry.color_code || ""}_${entry.color_name || ""}`;
         const existing = acc.find((i) => i.key === key);
 
         if (existing) {
@@ -78,6 +79,7 @@ const StockOverview: React.FC = () => {
             product_code: "",
             part_code: entry.part_code,
             color_code: entry.color_code,
+            color_name: entry.color_name,
             color_image: entry.color_image,
             total_qty: entry.quantity,
           });
@@ -138,7 +140,8 @@ const StockOverview: React.FC = () => {
     (item) =>
       item.product_code.toLowerCase().includes(rawSearch.toLowerCase()) ||
       item.part_code.toLowerCase().includes(rawSearch.toLowerCase()) ||
-      (item.color_code || "").toLowerCase().includes(rawSearch.toLowerCase())
+      (item.color_code || "").toLowerCase().includes(rawSearch.toLowerCase()) ||
+      (item.color_name || "").toLowerCase().includes(rawSearch.toLowerCase())
   );
 
   const filteredProd = productionStock.filter((item) =>
@@ -161,7 +164,8 @@ const StockOverview: React.FC = () => {
     const data = filteredRaw.map((item) => ({
       Product: item.product_code,
       Part: item.part_code,
-      Color: item.color_code || "-",
+      "Color Code": item.color_code || "-",
+      "Real Color": item.color_name || "-",
       Total_Qty: item.total_qty,
     }));
     const sheet = XLSX.utils.json_to_sheet(data);
@@ -198,58 +202,24 @@ const StockOverview: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className="stock-overview-wrapper">
       {/* 🧭 Tabs Header */}
-      <div
-        style={{
-          display: "flex",
-          borderBottom: "2px solid #e5e7eb",
-          marginBottom: "20px",
-          gap: "15px",
-        }}
-      >
+      <div className="stock-tabs-header">
         <button
           onClick={() => setActiveTab("raw")}
-          style={{
-            padding: "10px 20px",
-            border: "none",
-            background: "none",
-            fontSize: "16px",
-            fontWeight: 600,
-            cursor: "pointer",
-            borderBottom: activeTab === "raw" ? "3px solid #2563eb" : "3px solid transparent",
-            color: activeTab === "raw" ? "#2563eb" : "#4b5563",
-          }}
+          className={`stock-tab-btn ${activeTab === "raw" ? "active" : ""}`}
         >
           📦 Raw Material Stock
         </button>
         <button
           onClick={() => setActiveTab("production")}
-          style={{
-            padding: "10px 20px",
-            border: "none",
-            background: "none",
-            fontSize: "16px",
-            fontWeight: 600,
-            cursor: "pointer",
-            borderBottom: activeTab === "production" ? "3px solid #2563eb" : "3px solid transparent",
-            color: activeTab === "production" ? "#2563eb" : "#4b5563",
-          }}
+          className={`stock-tab-btn ${activeTab === "production" ? "active" : ""}`}
         >
           🏭 Production Stock
         </button>
         <button
           onClick={() => setActiveTab("packet")}
-          style={{
-            padding: "10px 20px",
-            border: "none",
-            background: "none",
-            fontSize: "16px",
-            fontWeight: 600,
-            cursor: "pointer",
-            borderBottom: activeTab === "packet" ? "3px solid #2563eb" : "3px solid transparent",
-            color: activeTab === "packet" ? "#2563eb" : "#4b5563",
-          }}
+          className={`stock-tab-btn ${activeTab === "packet" ? "active" : ""}`}
         >
           📦 Packet Stock
         </button>
@@ -257,7 +227,7 @@ const StockOverview: React.FC = () => {
 
       {/* 🔹 Tab Content: RAW MATERIAL */}
       {activeTab === "raw" && (
-        <div className="raw-stock-container">
+        <div className="raw-stock-container stock-tab-content">
           <h2>📦 Raw Material Stock Overview</h2>
           <div className="stock-toolbar">
             <input
@@ -282,102 +252,98 @@ const StockOverview: React.FC = () => {
               <p>😕 No raw material stock data available</p>
             </div>
           ) : (
-            <table className="stock-table">
-              <thead>
-                <tr>
-                  <th>Product</th>
-                  <th>Part</th>
-                  <th>Color</th>
-                  <th>Color Image</th>
-                  <th>Total Qty</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredRaw.map((item, i) => (
-                  <tr key={i}>
-                    <td>{item.product_code}</td>
-                    <td>{item.part_code}</td>
-                    <td>
-                      {item.color_code ? (
-                        <>
-                          <span
-                            className="color-dot"
-                            style={{ backgroundColor: item.color_code }}
-                          ></span>
-                          {item.color_code}
-                        </>
-                      ) : (
-                        "-"
-                      )}
-                    </td>
-                    <td>
-                      {item.color_image ? (
-                        <img
-                          src={getImageUrl(item.color_image)}
-                          alt="Color"
-                          width={50}
-                          height={50}
-                          className="clickable-thumbnail"
-                          onClick={() => setPreviewModalImg(getImageUrl(item.color_image))}
-                          style={{ borderRadius: "8px", border: "1px solid #ddd", objectFit: "cover", backgroundColor: "#fff" }}
-                        />
-                      ) : (
-                        "-"
-                      )}
-                    </td>
-                    <td className="qty-cell">{item.total_qty}</td>
+            <div className="table-wrapper">
+              <table className="stock-table">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Part</th>
+                    <th>Color</th>
+                    <th>Color Image</th>
+                    <th>Total Qty</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {filteredRaw.map((item, i) => (
+                    <tr key={i}>
+                      <td>{item.product_code}</td>
+                      <td>{item.part_code}</td>
+                      <td>
+                        {item.color_code || item.color_name ? (
+                          <span>
+                            {item.color_code}
+                            {item.color_name ? ` (${item.color_name})` : ""}
+                          </span>
+                        ) : (
+                          "-"
+                        )}
+                      </td>
+                      <td>
+                        {item.color_image ? (
+                          <img
+                            src={getImageUrl(item.color_image)}
+                            alt="Color"
+                            width={50}
+                            height={50}
+                            className="clickable-thumbnail"
+                            onClick={() => setPreviewModalImg(getImageUrl(item.color_image))}
+                            style={{ borderRadius: "8px", border: "1px solid #ddd", objectFit: "cover", backgroundColor: "#fff" }}
+                          />
+                        ) : (
+                          "-"
+                        )}
+                      </td>
+                      <td className="qty-cell">{item.total_qty}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
       )}
 
       {/* 🔹 Tab Content: PRODUCTION STOCK */}
       {activeTab === "production" && (
-        <div className="production-container">
+        <div className="production-container stock-tab-content">
           <h2>🏭 Product Production Stock</h2>
-          <div className="stock-toolbar" style={{ display: "flex", gap: "10px", marginBottom: "15px" }}>
+          <div className="stock-toolbar">
             <input
               type="text"
               placeholder="🔍 Search product/combination..."
               value={prodSearch}
               onChange={(e) => setProdSearch(e.target.value)}
-              style={{
-                flex: 1,
-                padding: "8px 12px",
-                border: "1px solid #ddd",
-                borderRadius: "6px",
-              }}
+              className="search-input"
             />
-            <button onClick={loadAllData} className="btn-refresh" disabled={isLoading}>
-              🔄 Refresh
-            </button>
-            <button onClick={exportProdExcel} style={{ backgroundColor: "#059669", color: "white", padding: "8px 12px", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: 600 }}>
-              📤 Export Excel
-            </button>
+            <div className="toolbar-buttons">
+              <button onClick={loadAllData} className="btn-refresh" disabled={isLoading}>
+                🔄 Refresh
+              </button>
+              <button onClick={exportProdExcel} className="btn-export btn-export-production">
+                📤 Export Excel
+              </button>
+            </div>
           </div>
 
           {filteredProd.length === 0 ? (
-            <div className="empty-state" style={{ textAlign: "center", color: "#555", marginTop: "40px" }}>
+            <div className="empty-state">
               <p>No production stock available yet.</p>
             </div>
           ) : (
             <>
-              <div className="table-wrapper" style={{ overflowX: "auto", background: "#fff", borderRadius: "8px", boxShadow: "0 2px 6px rgba(0,0,0,0.08)" }}>
-                <table className="product-table" style={{ width: "100%", borderCollapse: "collapse" }}>
-                  <thead style={{ background: "#f9fafb" }}>
+              <div className="table-wrapper">
+                <table className="stock-table production-stock-table">
+                  <thead>
                     <tr>
-                      <th style={{ textAlign: "left", padding: "10px 12px" }}>Product / Combination</th>
-                      <th style={{ textAlign: "center", padding: "10px 12px" }}>Total Quantity</th>
-                      <th style={{ textAlign: "left", padding: "10px 12px" }}>Last Updated</th>
+                      <th style={{ textAlign: "left" }}>Product / Combination</th>
+                      <th style={{ textAlign: "center" }}>Total Quantity</th>
+                      <th style={{ textAlign: "left" }}>Last Updated</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredProd.map((item: any) => (
-                      <tr key={item._id || item.id} style={{ borderBottom: "1px solid #eee", backgroundColor: item.total_qty > 0 ? "#fff" : "#fef2f2" }}>
-                        <td style={{ padding: "10px 12px", display: "flex", alignItems: "center", gap: "10px" }}>
+                      <tr key={item._id || item.id} className={item.total_qty > 0 ? "" : "out-of-stock"}>
+                        <td style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                           {item.sample_image ? (
                             <img
                               src={getImageUrl(item.sample_image)}
@@ -389,11 +355,11 @@ const StockOverview: React.FC = () => {
                               style={{ borderRadius: "8px", border: "1px solid #ddd", objectFit: "cover", backgroundColor: "#fff" }}
                             />
                           ) : (
-                            <div style={{ width: 55, height: 55, borderRadius: "8px", border: "1px solid #eee", background: "#f9f9f9" }} />
+                            <div style={{ width: 50, height: 50, borderRadius: "8px", border: "1px solid #eee", background: "#f9f9f9" }} />
                           )}
                           <span style={{ fontWeight: 600 }}>{item.combo_name}</span>
                         </td>
-                        <td style={{ fontWeight: 700, color: "#2563eb", textAlign: "center" }}>{item.total_qty}</td>
+                        <td className="qty-cell text-center">{item.total_qty}</td>
                         <td style={{ color: "#555" }}>
                           {new Date(item.updated_at).toLocaleString("en-IN", {
                             dateStyle: "medium",
@@ -405,8 +371,8 @@ const StockOverview: React.FC = () => {
                   </tbody>
                 </table>
               </div>
-              <div style={{ marginTop: "12px", textAlign: "right", fontWeight: 600 }}>
-                Total Produced Quantity: <span style={{ color: "#2563eb" }}>{totalProduced}</span>
+              <div className="stock-summary-footer">
+                Total Produced Quantity: <span className="highlight-qty">{totalProduced}</span>
               </div>
             </>
           )}
@@ -415,37 +381,34 @@ const StockOverview: React.FC = () => {
 
       {/* 🔹 Tab Content: PACKET STOCK */}
       {activeTab === "packet" && (
-        <div className="packet-production-container">
+        <div className="packet-production-container stock-tab-content">
           <h2>📦 Packet Stock Overview</h2>
-          <div className="stock-toolbar" style={{ display: "flex", gap: "10px", marginBottom: "15px" }}>
+          <div className="stock-toolbar">
             <input
               type="text"
               placeholder="🔍 Search packet or group..."
               value={packetSearch}
               onChange={(e) => setPacketSearch(e.target.value)}
-              style={{
-                flex: 1,
-                padding: "8px 12px",
-                border: "1px solid #ddd",
-                borderRadius: "6px",
-              }}
+              className="search-input"
             />
-            <button onClick={loadAllData} className="btn-refresh" disabled={isLoading}>
-              🔄 Refresh
-            </button>
-            <button onClick={exportPacketExcel} style={{ backgroundColor: "#059669", color: "white", padding: "8px 12px", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: 600 }}>
-              📤 Export Excel
-            </button>
+            <div className="toolbar-buttons">
+              <button onClick={loadAllData} className="btn-refresh" disabled={isLoading}>
+                🔄 Refresh
+              </button>
+              <button onClick={exportPacketExcel} className="btn-export btn-export-packet">
+                📤 Export Excel
+              </button>
+            </div>
           </div>
 
           {filteredPacket.length === 0 ? (
-            <div style={{ padding: "15px", background: "#fee2e2", border: "1px solid #fecaca", borderRadius: "6px", color: "#b91c1c", textAlign: "center" }}>
+            <div className="empty-state error-state">
               ⚠️ No packet stock data found!
             </div>
           ) : (
             <>
-              <div className="table-scroll-container">
-                <table className="styled-table">
+              <div className="table-wrapper">
+                <table className="stock-table packet-stock-table">
                   <thead>
                     <tr>
                       <th style={{ width: "80px" }}>Image</th>
@@ -468,14 +431,14 @@ const StockOverview: React.FC = () => {
                               style={{ width: "50px", height: "50px", borderRadius: "8px", objectFit: "cover", border: "1px solid #ddd" }}
                             />
                           ) : (
-                            <div style={{ width: "60px", height: "60px", background: "#f3f4f6", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", color: "#999", fontSize: "12px" }}>
+                            <div style={{ width: "50px", height: "50px", background: "#f3f4f6", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", color: "#999", fontSize: "12px" }}>
                               No Img
                             </div>
                           )}
                         </td>
                         <td style={{ fontWeight: 600 }}>{p.packet_code}</td>
                         <td>{p.group_name}</td>
-                        <td style={{ fontWeight: 700, color: getStockColor(p.total_qty), textAlign: "center" }}>{p.total_qty}</td>
+                        <td className="qty-cell text-center" style={{ color: getStockColor(p.total_qty) }}>{p.total_qty}</td>
                         <td>
                           {p.last_updated
                             ? new Date(p.last_updated).toLocaleString("en-IN", {
@@ -489,8 +452,8 @@ const StockOverview: React.FC = () => {
                   </tbody>
                 </table>
               </div>
-              <div style={{ marginTop: "15px", textAlign: "right", fontWeight: "bold", background: "#f3f4f6", padding: "10px 12px", borderRadius: "6px" }}>
-                🧮 Total Packets in Stock: <span style={{ color: "#2563eb" }}>{totalPackets}</span>
+              <div className="stock-summary-footer packet-summary-footer">
+                🧮 Total Packets in Stock: <span className="highlight-qty">{totalPackets}</span>
               </div>
             </>
           )}

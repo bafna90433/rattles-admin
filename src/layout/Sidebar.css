@@ -32,7 +32,10 @@
   flex: 1;
   margin-left: var(--sidebar-width);
   padding: 30px 40px;
-  background: linear-gradient(135deg, #f5f3ff 0%, #eef2ff 100%);
+  background: radial-gradient(at 0% 0%, rgba(224, 242, 254, 0.5) 0px, transparent 50%), 
+              radial-gradient(at 50% 0%, rgba(245, 243, 255, 0.5) 0px, transparent 50%), 
+              radial-gradient(at 100% 0%, rgba(238, 242, 255, 0.5) 0px, transparent 50%), 
+              #f8fafc;
   overflow-y: auto;
   min-height: 100vh;
   width: calc(100vw - var(--sidebar-width));
