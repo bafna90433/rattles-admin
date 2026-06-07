@@ -205,3 +205,59 @@
 .packet-combo-list tbody tr:hover {
   background: #f8fafc;
 }
+
+/* Vertical list of products in table */
+.products-vertical-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.product-vertical-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 6px 10px;
+  width: fit-content;
+  min-width: 140px;
+  transition: all 0.2s ease;
+}
+
+.product-vertical-item:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  transform: translateX(4px);
+}
+
+.product-vertical-item img {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+}
+
+.product-vertical-noimg {
+  width: 32px;
+  height: 32px;
+  background: #f1f5f9;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+  text-transform: uppercase;
+}
+
+.product-vertical-code {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #1e3a8a;
+}

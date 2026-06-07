@@ -248,65 +248,29 @@ const PacketCombination: React.FC = () => {
                     {/* Products with images */}
                     <td style={{ minWidth: "180px" }}>
                       {c.product_images && c.product_images.length > 0 ? (
-                        c.product_images.map((p: any, idx: number) => (
-                          <span
-                            key={idx}
-                            title={p.product_code}
-                            style={{
-                              display: "inline-block",
-                              margin: "4px",
-                              textAlign: "center",
-                              verticalAlign: "top",
-                            }}
-                          >
-                            {p.product_image ? (
-                              <img
-                                src={getImageUrl(p.product_image)}
-                                alt={p.product_code}
-                                style={{
-                                  width: "40px",
-                                  height: "40px",
-                                  borderRadius: "6px",
-                                  objectFit: "cover",
-                                  border: "1px solid #ccc",
-                                  transition: "transform 0.2s ease",
-                                }}
-                                onMouseEnter={(e) =>
-                                  (e.currentTarget.style.transform = "scale(1.3)")
-                                }
-                                onMouseLeave={(e) =>
-                                  (e.currentTarget.style.transform = "scale(1)")
-                                }
-                              />
-                            ) : (
-                              <div
-                                style={{
-                                  width: "40px",
-                                  height: "40px",
-                                  background: "#f3f4f6",
-                                  borderRadius: "6px",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  fontSize: "10px",
-                                  color: "#666",
-                                  border: "1px solid #ddd",
-                                }}
-                              >
-                                No Img
-                              </div>
-                            )}
+                        <div className="products-vertical-list">
+                          {c.product_images.map((p: any, idx: number) => (
                             <div
-                              style={{
-                                fontSize: "11px",
-                                color: "#1e3a8a",
-                                marginTop: "2px",
-                              }}
+                              key={idx}
+                              className="product-vertical-item"
+                              title={p.product_code}
                             >
-                              {p.product_code}
+                              {p.product_image ? (
+                                <img
+                                  src={getImageUrl(p.product_image)}
+                                  alt={p.product_code}
+                                />
+                              ) : (
+                                <div className="product-vertical-noimg">
+                                  No Img
+                                </div>
+                              )}
+                              <span className="product-vertical-code">
+                                {p.product_code}
+                              </span>
                             </div>
-                          </span>
-                        ))
+                          ))}
+                        </div>
                       ) : (
                         <span style={{ color: "#999" }}>No products</span>
                       )}
