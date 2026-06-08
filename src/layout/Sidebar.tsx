@@ -3,16 +3,15 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   MdDashboard,
   MdDevicesOther,
-  MdAddCircleOutline,
+  MdInventory2,
   MdCallMerge,
   MdBuild,
   MdInventory,
-  MdExitToApp,
+  MdLogout,
   MdMenu,
   MdClose,
-  MdPrecisionManufacturing,
-  MdFactory,
-  MdPointOfSale
+  MdAdminPanelSettings,
+  MdSettings,
 } from "react-icons/md";
 import "./Sidebar.css";
 
@@ -20,6 +19,7 @@ const Sidebar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
+  const username = localStorage.getItem("username") || "Admin";
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleLogout = () => {
@@ -27,145 +27,100 @@ const Sidebar: React.FC = () => {
     navigate("/");
   };
 
-  const toggleMobileMenu = () => {
-    setMobileOpen(!mobileOpen);
-  };
+  const navItem = (path: string, label: string, icon: React.ReactNode) => (
+    <div className={`nav-item ${location.pathname === path ? "active" : ""}`}>
+      <Link to={path} onClick={() => setMobileOpen(false)}>
+        <div className="nav-icon">{icon}</div>
+        <span>{label}</span>
+      </Link>
+    </div>
+  );
 
   return (
     <>
-      {/* Mobile Header */}
       <div className="mobile-header">
-        <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
+        <button className="mobile-menu-toggle" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
           {mobileOpen ? <MdClose size={24} /> : <MdMenu size={24} />}
         </button>
-        <h2 className="mobile-logo">🧱 STOCK MANAGER</h2>
+        <div className="mobile-brand">
+          <span className="mobile-brand-mark">BS</span>
+          <span>Stock Manager</span>
+        </div>
       </div>
 
-      {/* Overlay for mobile */}
-      {mobileOpen && <div className="sidebar-overlay" onClick={toggleMobileMenu}></div>}
+      {mobileOpen && <div className="sidebar-overlay" onClick={() => setMobileOpen(false)} />}
 
-      {/* Sidebar */}
-      <div className={`sidebar ${mobileOpen ? 'mobile-open' : ''}`}>
-        {/* Logo */}
+      <aside className={`sidebar admin-sidebar ${mobileOpen ? "mobile-open" : ""}`}>
         <div className="sidebar-header">
           <div className="logo-container">
-            <div className="logo-icon">🧱</div>
+            <div className="logo-icon">BS</div>
             <div className="logo-text">
-              <h2>STOCK MANAGER</h2>
-              <span>Inventory System</span>
+              <h2>Bafna Stock</h2>
+              <span>Inventory Management</span>
             </div>
           </div>
-          <button className="close-mobile" onClick={toggleMobileMenu}>
+          <button className="close-mobile" onClick={() => setMobileOpen(false)} aria-label="Close menu">
             <MdClose size={20} />
           </button>
         </div>
 
         <div className="sidebar-content">
-          {/* ========================================================= */}
-          {/* 👑 ADMIN SECTIONS */}
-          {/* ========================================================= */}
           {role === "admin" && (
             <>
-              {/* Dashboard */}
-              <div className="sidebar-group single-item">
-                <div className={`nav-item ${location.pathname === "/admin/dashboard" ? "active" : ""}`}>
-                  <Link to="/admin/dashboard" onClick={() => setMobileOpen(false)}>
-                    <div className="nav-icon">
-                      <MdDashboard size={20} />
-                    </div>
-                    <span>Dashboard</span>
-                  </Link>
-                </div>
-              </div>
-
-              {/* Section: CONFIGURATION */}
               <div className="sidebar-group">
-                <div className="sidebar-group-title">⚙️ Setup & Masters</div>
+                <div className="sidebar-group-title">Overview</div>
                 <div className="sidebar-group-items">
-                  <div className={`nav-item ${location.pathname === "/admin/reference" ? "active" : ""}`}>
-                    <Link to="/admin/reference" onClick={() => setMobileOpen(false)}>
-                      <div className="nav-icon">
-                        <MdDevicesOther size={20} />
-                      </div>
-                      <span>Product Reference</span>
-                    </Link>
-                  </div>
-                  <div className={`nav-item ${location.pathname === "/admin/packet-reference" ? "active" : ""}`}>
-                    <Link to="/admin/packet-reference" onClick={() => setMobileOpen(false)}>
-                      <div className="nav-icon">
-                        <MdAddCircleOutline size={20} />
-                      </div>
-                      <span>Packet Reference</span>
-                    </Link>
-                  </div>
+                  {navItem("/admin/dashboard", "Dashboard", <MdDashboard size={20} />)}
                 </div>
               </div>
 
-              {/* Section: COMBINATIONS */}
               <div className="sidebar-group">
-                <div className="sidebar-group-title">🧩 Combinations</div>
+                <div className="sidebar-group-title">Masters</div>
                 <div className="sidebar-group-items">
-                  <div className={`nav-item ${location.pathname === "/admin/combination" ? "active" : ""}`}>
-                    <Link to="/admin/combination" onClick={() => setMobileOpen(false)}>
-                      <div className="nav-icon">
-                        <MdCallMerge size={20} />
-                      </div>
-                      <span>Group Setup</span>
-                    </Link>
-                  </div>
-                  <div className={`nav-item ${location.pathname === "/admin/packet-combination" ? "active" : ""}`}>
-                    <Link to="/admin/packet-combination" onClick={() => setMobileOpen(false)}>
-                      <div className="nav-icon">
-                        <MdCallMerge size={20} />
-                      </div>
-                      <span>Packet Combination</span>
-                    </Link>
-                  </div>
+                  {navItem("/admin/reference", "Products", <MdDevicesOther size={20} />)}
+                  {navItem("/admin/packet-reference", "Packets", <MdInventory2 size={20} />)}
                 </div>
               </div>
 
-              {/* Section: OPERATIONS */}
               <div className="sidebar-group">
-                <div className="sidebar-group-title">📦 Operations</div>
+                <div className="sidebar-group-title">Configuration</div>
                 <div className="sidebar-group-items">
-                  <div className={`nav-item ${location.pathname === "/admin/raw-list" ? "active" : ""}`}>
-                    <Link to="/admin/raw-list" onClick={() => setMobileOpen(false)}>
-                      <div className="nav-icon">
-                        <MdBuild size={20} />
-                      </div>
-                      <span>Raw Entries</span>
-                    </Link>
-                  </div>
+                  {navItem("/admin/combination", "Product Groups", <MdCallMerge size={20} />)}
+                  {navItem("/admin/packet-combination", "Packet Groups", <MdCallMerge size={20} />)}
                 </div>
               </div>
 
-              {/* Section: STOCKS & REPORTS */}
-              <div className="sidebar-group stock-overview-section">
-                <div className="sidebar-group-title">📊 Stocks & Reports</div>
+              <div className="sidebar-group">
+                <div className="sidebar-group-title">Inventory</div>
                 <div className="sidebar-group-items">
-                  <div className={`nav-item ${location.pathname === "/admin/stock-overview" ? "active" : ""}`}>
-                    <Link to="/admin/stock-overview" onClick={() => setMobileOpen(false)}>
-                      <div className="nav-icon">
-                        <MdInventory size={20} />
-                      </div>
-                      <span>Stock Overview</span>
-                    </Link>
-                  </div>
+                  {navItem("/admin/raw-list", "Raw Material Entries", <MdBuild size={20} />)}
+                  {navItem("/admin/stock-overview", "Stock Overview", <MdInventory size={20} />)}
+                </div>
+              </div>
+
+              <div className="sidebar-group">
+                <div className="sidebar-group-title">System</div>
+                <div className="sidebar-group-items">
+                  {navItem("/admin/settings", "Settings", <MdSettings size={20} />)}
                 </div>
               </div>
             </>
           )}
-
         </div>
 
-        {/* LOGOUT */}
         <div className="sidebar-footer">
-          <button className="logout-btn" onClick={handleLogout}>
-            <MdExitToApp size={20} />
-            <span>Logout</span>
-          </button>
+          <div className="user-card">
+            <div className="user-avatar"><MdAdminPanelSettings size={21} /></div>
+            <div className="user-details">
+              <strong>{username}</strong>
+              <span>Administrator</span>
+            </div>
+            <button className="logout-btn" onClick={handleLogout} title="Sign out" aria-label="Sign out">
+              <MdLogout size={20} />
+            </button>
+          </div>
         </div>
-      </div>
+      </aside>
     </>
   );
 };

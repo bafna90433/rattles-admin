@@ -11,9 +11,12 @@ import CombinationSetup from "./pages/CombinationSetup";
 import RawMaterialList from "./pages/RawMaterialList";
 import PacketReference from "./pages/PacketReference";
 import PacketCombination from "./pages/PacketCombination";
+import Settings from "./pages/Settings";
 
 // 🔐 Login
 import AdminLogin from "./pages/AdminLogin";
+
+import { Toaster } from "react-hot-toast";
 
 // 🔒 Protected Route
 const ProtectedRoute: React.FC<{ allowedRoles: string[]; children: React.ReactNode }> = ({
@@ -27,6 +30,7 @@ const ProtectedRoute: React.FC<{ allowedRoles: string[]; children: React.ReactNo
 const App: React.FC = () => {
   return (
     <Router>
+      <Toaster position="top-center" reverseOrder={false} toastOptions={{ duration: 4000, style: { fontFamily: 'Inter, system-ui, sans-serif', fontSize: '14px', fontWeight: 600 } }} />
       <Routes>
         {/* Admin Login at Root */}
         <Route path="/" element={<AdminLogin />} />
@@ -46,6 +50,7 @@ const App: React.FC = () => {
                   <Route path="combination" element={<CombinationSetup />} />
                   <Route path="packet-reference" element={<PacketReference />} />
                   <Route path="packet-combination" element={<PacketCombination />} />
+                  <Route path="settings" element={<Settings />} />
                 </Routes>
               </Layout>
             </ProtectedRoute>

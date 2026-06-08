@@ -174,4 +174,13 @@ export const api = {
     const res = await apiInstance.get("/packet-sales");
     return res.data;
   },
+
+  getDashboardSettings: async () => {
+    const res = await apiInstance.get("/dashboard-settings");
+    return res.data;
+  },
+  updateWorkflowImage: async (key: string, data: { title?: string; image?: string }) => {
+    const res = await apiInstance.put(`/dashboard-settings/workflow-image/${key}`, data);
+    return res.data;
+  },
 };

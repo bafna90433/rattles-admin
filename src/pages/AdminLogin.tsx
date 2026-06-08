@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../styles/Login.css";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const AdminLogin: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -17,14 +18,14 @@ const AdminLogin: React.FC = () => {
 
       if (res.success) {
         localStorage.setItem("role", "admin");
-        alert("✅ Login successful!");
+        toast.success("Login successful!");
         navigate("/admin/dashboard");
       } else {
-        alert(res.message || "❌ Invalid username or password");
+        toast.error(res.message || "Invalid username or password");
       }
     } catch (err) {
       console.error("⚠️ Login error:", err);
-      alert("⚠️ Something went wrong while logging in.");
+      toast.error("Something went wrong while logging in.");
     }
   };
 

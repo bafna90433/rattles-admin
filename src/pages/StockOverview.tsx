@@ -1,8 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "../styles/RawMaterialStock.css";
 import "../styles/ProductionPage.css";
 import "../styles/PacketProduction.css";
 import * as XLSX from "xlsx";
+import {
+  MdFileDownload,
+  MdInventory2,
+  MdOutlineFactory,
+  MdOutlineInventory,
+  MdRefresh,
+  MdSearch,
+} from "react-icons/md";
 
 interface RawStockItem {
   id: number;
@@ -35,33 +43,26 @@ interface PacketStockItem {
 const StockOverview: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"raw" | "production" | "packet">("raw");
   const [isLoading, setIsLoading] = useState(false);
-
-  // States
   const [rawStock, setRawStock] = useState<RawStockItem[]>([]);
   const [rawSearch, setRawSearch] = useState("");
-
   const [productionStock, setProductionStock] = useState<ProductionStockItem[]>([]);
   const [prodSearch, setProdSearch] = useState("");
-
   const [packetStock, setPacketStock] = useState<PacketStockItem[]>([]);
   const [packetSearch, setPacketSearch] = useState("");
   const [previewModalImg, setPreviewModalImg] = useState<string | null>(null);
 
-  // Helper to render image (handles both legacy base64 and ImageKit cloud URLs)
   const getImageUrl = (src?: string) => {
     if (!src) return "";
     if (src.startsWith("http")) return src;
     return `data:image/png;base64,${src}`;
   };
 
-  // Helper to color packet stock levels
   const getStockColor = (qty: number) => {
-    if (qty > 50) return "#16a34a"; // green
-    if (qty > 10) return "#f59e0b"; // orange
-    return "#dc2626"; // red
+    if (qty > 50) return "#15803d";
+    if (qty > 10) return "#b45309";
+    return "#b91c1c";
   };
 
-  // 🔄 Load Raw Material Stock
   const loadRawStock = async () => {
     try {
       const entries = await (window as any).electronAPI.getRawEntries();
@@ -98,31 +99,28 @@ const StockOverview: React.FC = () => {
 
       setRawStock(merged);
     } catch (err) {
-      console.error("❌ Error loading raw stock:", err);
+      console.error("Error loading raw stock:", err);
     }
   };
 
-  // 🔄 Load Production Stock
   const loadProductionStock = async () => {
     try {
       const res = await (window as any).electronAPI.getProductionStock?.();
       setProductionStock(res || []);
     } catch (err) {
-      console.error("❌ Error loading production stock:", err);
+      console.error("Error loading production stock:", err);
     }
   };
 
-  // 🔄 Load Packet Stock
   const loadPacketStock = async () => {
     try {
       const data = await (window as any).electronAPI.getPacketStock?.();
       setPacketStock(data || []);
     } catch (err) {
-      console.error("❌ Error loading packet stock:", err);
+      console.error("Error loading packet stock:", err);
     }
   };
 
-  // Main fetch wrapper
   const loadAllData = async () => {
     setIsLoading(true);
     if (activeTab === "raw") await loadRawStock();
@@ -135,7 +133,6 @@ const StockOverview: React.FC = () => {
     loadAllData();
   }, [activeTab]);
 
-  // Filtering
   const filteredRaw = rawStock.filter(
     (item) =>
       item.product_code.toLowerCase().includes(rawSearch.toLowerCase()) ||
@@ -154,13 +151,50 @@ const StockOverview: React.FC = () => {
       item.group_name.toLowerCase().includes(packetSearch.toLowerCase())
   );
 
-  // Totals
   const totalProduced = productionStock.reduce((sum, s) => sum + (s.total_qty || 0), 0);
   const totalPackets = packetStock.reduce((sum, s) => sum + (s.total_qty || 0), 0);
 
-  // Excel Exports
+  const pageMeta = useMemo(() => {
+    if (activeTab === "production") {
+      return {
+        title: "Production Stock",
+        subtitle: "Finished combination stock with latest production updates.",
+        countLabel: "Combinations",
+        count: filteredProd.length,
+        totalLabel: "Total Produced",
+        total: totalProduced,
+      };
+    }
+
+    if (activeTab === "packet") {
+      return {
+        title: "Packet Stock",
+        subtitle: "Available packet stock grouped by packet code and group.",
+        countLabel: "Packets",
+        count: filteredPacket.length,
+        totalLabel: "Total Packets",
+        total: totalPackets,
+      };
+    }
+
+    return {
+      title: "Raw Material Stock",
+      subtitle: "Live raw material quantity by product, part and color.",
+      countLabel: "Materials",
+      count: filteredRaw.length,
+      totalLabel: "Total Quantity",
+      total: filteredRaw.reduce((sum, item) => sum + (item.total_qty || 0), 0),
+    };
+  }, [activeTab, filteredRaw, filteredProd, filteredPacket, totalProduced, totalPackets]);
+
+  const tabs = [
+    { key: "raw" as const, label: "Raw Material", icon: <MdInventory2 size={18} /> },
+    { key: "production" as const, label: "Production", icon: <MdOutlineFactory size={18} /> },
+    { key: "packet" as const, label: "Packet Stock", icon: <MdOutlineInventory size={18} /> },
+  ];
+
   const exportRawExcel = () => {
-    if (filteredRaw.length === 0) return alert("⚠️ No data available to export!");
+    if (filteredRaw.length === 0) return alert("No data available to export!");
     const data = filteredRaw.map((item) => ({
       Product: item.product_code,
       Part: item.part_code,
@@ -175,7 +209,7 @@ const StockOverview: React.FC = () => {
   };
 
   const exportProdExcel = () => {
-    if (filteredProd.length === 0) return alert("⚠️ No data available to export!");
+    if (filteredProd.length === 0) return alert("No data available to export!");
     const data = filteredProd.map((item) => ({
       "Product / Combination": item.combo_name,
       "Total Quantity": item.total_qty,
@@ -188,7 +222,7 @@ const StockOverview: React.FC = () => {
   };
 
   const exportPacketExcel = () => {
-    if (filteredPacket.length === 0) return alert("⚠️ No data to export!");
+    if (filteredPacket.length === 0) return alert("No data to export!");
     const data = filteredPacket.map((p) => ({
       "Packet Code": p.packet_code,
       "Group Name": p.group_name,
@@ -203,53 +237,72 @@ const StockOverview: React.FC = () => {
 
   return (
     <div className="stock-overview-wrapper">
-      {/* 🧭 Tabs Header */}
-      <div className="stock-tabs-header">
-        <button
-          onClick={() => setActiveTab("raw")}
-          className={`stock-tab-btn ${activeTab === "raw" ? "active" : ""}`}
-        >
-          📦 Raw Material Stock
-        </button>
-        <button
-          onClick={() => setActiveTab("production")}
-          className={`stock-tab-btn ${activeTab === "production" ? "active" : ""}`}
-        >
-          🏭 Production Stock
-        </button>
-        <button
-          onClick={() => setActiveTab("packet")}
-          className={`stock-tab-btn ${activeTab === "packet" ? "active" : ""}`}
-        >
-          📦 Packet Stock
-        </button>
+      <div className="stock-page-header">
+        <div>
+          <p className="stock-kicker">Inventory Overview</p>
+          <h1>{pageMeta.title}</h1>
+          <span>{pageMeta.subtitle}</span>
+        </div>
+        <div className="stock-header-metrics">
+          <div className="stock-metric">
+            <small>{pageMeta.countLabel}</small>
+            <strong>{pageMeta.count.toLocaleString("en-IN")}</strong>
+          </div>
+          <div className="stock-metric accent">
+            <small>{pageMeta.totalLabel}</small>
+            <strong>{pageMeta.total.toLocaleString("en-IN")}</strong>
+          </div>
+        </div>
       </div>
 
-      {/* 🔹 Tab Content: RAW MATERIAL */}
+      <div className="stock-tabs-header" role="tablist" aria-label="Stock type">
+        {tabs.map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => setActiveTab(tab.key)}
+            className={`stock-tab-btn ${activeTab === tab.key ? "active" : ""}`}
+            type="button"
+            role="tab"
+            aria-selected={activeTab === tab.key}
+          >
+            {tab.icon}
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
       {activeTab === "raw" && (
         <div className="raw-stock-container stock-tab-content">
-          <h2>📦 Raw Material Stock Overview</h2>
+          <div className="stock-panel-heading">
+            <h2>Raw Material Stock Overview</h2>
+            <span>{filteredRaw.length.toLocaleString("en-IN")} rows</span>
+          </div>
           <div className="stock-toolbar">
-            <input
-              type="text"
-              placeholder="🔍 Search product, part or color..."
-              value={rawSearch}
-              onChange={(e) => setRawSearch(e.target.value)}
-              className="search-input"
-            />
+            <label className="stock-search-field">
+              <MdSearch size={18} />
+              <input
+                type="text"
+                placeholder="Search product, part or color..."
+                value={rawSearch}
+                onChange={(e) => setRawSearch(e.target.value)}
+                className="search-input"
+              />
+            </label>
             <div className="toolbar-buttons">
               <button onClick={loadAllData} className="btn-refresh" disabled={isLoading}>
-                {isLoading ? "⏳ Loading..." : "🔄 Refresh"}
+                <MdRefresh size={18} />
+                {isLoading ? "Loading..." : "Refresh"}
               </button>
               <button onClick={exportRawExcel} className="btn-export">
-                📤 Export Excel
+                <MdFileDownload size={18} />
+                Export Excel
               </button>
             </div>
           </div>
 
           {filteredRaw.length === 0 ? (
             <div className="empty-state">
-              <p>😕 No raw material stock data available</p>
+              <p>No raw material stock data available</p>
             </div>
           ) : (
             <div className="table-wrapper">
@@ -270,7 +323,7 @@ const StockOverview: React.FC = () => {
                       <td>{item.part_code}</td>
                       <td>
                         {item.color_code || item.color_name ? (
-                          <span>
+                          <span className="color-code-chip">
                             {item.color_code}
                             {item.color_name ? ` (${item.color_name})` : ""}
                           </span>
@@ -287,13 +340,12 @@ const StockOverview: React.FC = () => {
                             height={50}
                             className="clickable-thumbnail"
                             onClick={() => setPreviewModalImg(getImageUrl(item.color_image))}
-                            style={{ borderRadius: "8px", border: "1px solid #ddd", objectFit: "cover", backgroundColor: "#fff" }}
                           />
                         ) : (
                           "-"
                         )}
                       </td>
-                      <td className="qty-cell">{item.total_qty}</td>
+                      <td className="qty-cell"><span>{item.total_qty.toLocaleString("en-IN")}</span></td>
                     </tr>
                   ))}
                 </tbody>
@@ -303,24 +355,31 @@ const StockOverview: React.FC = () => {
         </div>
       )}
 
-      {/* 🔹 Tab Content: PRODUCTION STOCK */}
       {activeTab === "production" && (
         <div className="production-container stock-tab-content">
-          <h2>🏭 Product Production Stock</h2>
+          <div className="stock-panel-heading">
+            <h2>Product Production Stock</h2>
+            <span>{filteredProd.length.toLocaleString("en-IN")} rows</span>
+          </div>
           <div className="stock-toolbar">
-            <input
-              type="text"
-              placeholder="🔍 Search product/combination..."
-              value={prodSearch}
-              onChange={(e) => setProdSearch(e.target.value)}
-              className="search-input"
-            />
+            <label className="stock-search-field">
+              <MdSearch size={18} />
+              <input
+                type="text"
+                placeholder="Search product/combination..."
+                value={prodSearch}
+                onChange={(e) => setProdSearch(e.target.value)}
+                className="search-input"
+              />
+            </label>
             <div className="toolbar-buttons">
               <button onClick={loadAllData} className="btn-refresh" disabled={isLoading}>
-                🔄 Refresh
+                <MdRefresh size={18} />
+                Refresh
               </button>
               <button onClick={exportProdExcel} className="btn-export btn-export-production">
-                📤 Export Excel
+                <MdFileDownload size={18} />
+                Export Excel
               </button>
             </div>
           </div>
@@ -352,15 +411,14 @@ const StockOverview: React.FC = () => {
                               height={50}
                               className="clickable-thumbnail"
                               onClick={() => setPreviewModalImg(getImageUrl(item.sample_image))}
-                              style={{ borderRadius: "8px", border: "1px solid #ddd", objectFit: "cover", backgroundColor: "#fff" }}
                             />
                           ) : (
-                            <div style={{ width: 50, height: 50, borderRadius: "8px", border: "1px solid #eee", background: "#f9f9f9" }} />
+                            <div className="stock-image-placeholder" />
                           )}
                           <span style={{ fontWeight: 600 }}>{item.combo_name}</span>
                         </td>
-                        <td className="qty-cell text-center">{item.total_qty}</td>
-                        <td style={{ color: "#555" }}>
+                        <td className="qty-cell text-center"><span>{item.total_qty.toLocaleString("en-IN")}</span></td>
+                        <td style={{ color: "#475467" }}>
                           {new Date(item.updated_at).toLocaleString("en-IN", {
                             dateStyle: "medium",
                             timeStyle: "short",
@@ -372,38 +430,45 @@ const StockOverview: React.FC = () => {
                 </table>
               </div>
               <div className="stock-summary-footer">
-                Total Produced Quantity: <span className="highlight-qty">{totalProduced}</span>
+                Total Produced Quantity: <span className="highlight-qty">{totalProduced.toLocaleString("en-IN")}</span>
               </div>
             </>
           )}
         </div>
       )}
 
-      {/* 🔹 Tab Content: PACKET STOCK */}
       {activeTab === "packet" && (
         <div className="packet-production-container stock-tab-content">
-          <h2>📦 Packet Stock Overview</h2>
+          <div className="stock-panel-heading">
+            <h2>Packet Stock Overview</h2>
+            <span>{filteredPacket.length.toLocaleString("en-IN")} rows</span>
+          </div>
           <div className="stock-toolbar">
-            <input
-              type="text"
-              placeholder="🔍 Search packet or group..."
-              value={packetSearch}
-              onChange={(e) => setPacketSearch(e.target.value)}
-              className="search-input"
-            />
+            <label className="stock-search-field">
+              <MdSearch size={18} />
+              <input
+                type="text"
+                placeholder="Search packet or group..."
+                value={packetSearch}
+                onChange={(e) => setPacketSearch(e.target.value)}
+                className="search-input"
+              />
+            </label>
             <div className="toolbar-buttons">
               <button onClick={loadAllData} className="btn-refresh" disabled={isLoading}>
-                🔄 Refresh
+                <MdRefresh size={18} />
+                Refresh
               </button>
               <button onClick={exportPacketExcel} className="btn-export btn-export-packet">
-                📤 Export Excel
+                <MdFileDownload size={18} />
+                Export Excel
               </button>
             </div>
           </div>
 
           {filteredPacket.length === 0 ? (
             <div className="empty-state error-state">
-              ⚠️ No packet stock data found!
+              No packet stock data found.
             </div>
           ) : (
             <>
@@ -428,17 +493,16 @@ const StockOverview: React.FC = () => {
                               alt={p.group_name}
                               className="clickable-thumbnail"
                               onClick={() => setPreviewModalImg(getImageUrl(p.sample_image))}
-                              style={{ width: "50px", height: "50px", borderRadius: "8px", objectFit: "cover", border: "1px solid #ddd" }}
                             />
                           ) : (
-                            <div style={{ width: "50px", height: "50px", background: "#f3f4f6", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", color: "#999", fontSize: "12px" }}>
-                              No Img
-                            </div>
+                            <div className="stock-image-placeholder">No Img</div>
                           )}
                         </td>
                         <td style={{ fontWeight: 600 }}>{p.packet_code}</td>
                         <td>{p.group_name}</td>
-                        <td className="qty-cell text-center" style={{ color: getStockColor(p.total_qty) }}>{p.total_qty}</td>
+                        <td className="qty-cell text-center" style={{ color: getStockColor(p.total_qty) }}>
+                          <span>{p.total_qty.toLocaleString("en-IN")}</span>
+                        </td>
                         <td>
                           {p.last_updated
                             ? new Date(p.last_updated).toLocaleString("en-IN", {
@@ -453,17 +517,17 @@ const StockOverview: React.FC = () => {
                 </table>
               </div>
               <div className="stock-summary-footer packet-summary-footer">
-                🧮 Total Packets in Stock: <span className="highlight-qty">{totalPackets}</span>
+                Total Packets in Stock: <span className="highlight-qty">{totalPackets.toLocaleString("en-IN")}</span>
               </div>
             </>
           )}
         </div>
       )}
-      {/* 🖼️ Global Zoom Preview Modal */}
+
       {previewModalImg && (
         <div className="image-preview-modal-overlay" onClick={() => setPreviewModalImg(null)}>
           <div className="image-preview-modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="close-preview-modal" onClick={() => setPreviewModalImg(null)}>✕</button>
+            <button className="close-preview-modal" onClick={() => setPreviewModalImg(null)}>x</button>
             <img src={previewModalImg} alt="Large Preview" />
           </div>
         </div>
